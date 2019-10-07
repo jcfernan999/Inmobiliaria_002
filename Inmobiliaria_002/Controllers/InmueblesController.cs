@@ -9,8 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Inmobiliaria_002.Controllers
 {
     public class InmueblesController : Controller
-    {
-		 
+    { 
         private readonly IRepositorioInmueble repositorio;
         private readonly IRepositorioPropietario repoPropietario;
 
@@ -20,47 +19,41 @@ namespace Inmobiliaria_002.Controllers
             this.repoPropietario = repoPropietario;
         }
 
-                // GET: Inquilino
         public ActionResult Index()
         {
 		 var lista = repositorio.ObtenerTodos();
           
             if (TempData.ContainsKey("Id"))
                 ViewBag.Id = TempData["Id"];
-             
-            return View(lista);
 
+            return View(lista);
         }
 
-        // GET: Inquilino/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Inquilino/Create
+        // Inquilino/Create
         public ActionResult Create()
         {
             ViewBag.Propietarios = repoPropietario.ObtenerTodos();
             return View();
         }
 
-        // POST: Inquilino/Create
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create(Inmueble inmueble)
         {
             try
             {
+                    
                 TempData["Nombre"] = inmueble.Direccion;
-				//if (ModelState.IsValid)
-				//{
-					repositorio.Alta(inmueble);
-					return RedirectToAction(nameof(Index));
-				//}
-				//else
-				//	return View();
-			}
+                repositorio.Alta(inmueble);
+                return RedirectToAction(nameof(Index));
+               
+            }
             catch
             {
                 return View();
@@ -74,7 +67,6 @@ namespace Inmobiliaria_002.Controllers
             return new JsonResult(res);
         }
 
-        // GET: Inquilino/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
             var entidad = repositorio.ObtenerPorId(id);
@@ -86,21 +78,15 @@ namespace Inmobiliaria_002.Controllers
             return View(entidad);
         }
 
-        // POST: Inquilino/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
 
         public ActionResult Edit(int id, Inmueble inmueble)
         {
-            //var miPropietario = repositorio.ObtenerPorId(id);
-
-            if (id != inmueble.inmuebleId)
+            if (id != inmueble.InmuebleId)
             {
                 return NotFound();
             }
-
-            //if (ModelState.IsValid)
-            //{
                 try
                 {
                     repositorio.Modificacion(inmueble);
@@ -113,53 +99,28 @@ namespace Inmobiliaria_002.Controllers
                     return View();
                 }
                 return RedirectToAction(nameof(Index));
-            //}
-            //return View();
+         
         }
 
-        // GET: Inquilino/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Inquilino/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
-                // TODO: Add delete logic here
-
                 var inmueble = repositorio.ObtenerPorId(id);
-
-                repositorio.Baja(inmueble.inmuebleId);
-
-
+                repositorio.Baja(inmueble.InmuebleId);
                 return RedirectToAction(nameof(Index));
-
-                  
             }
             catch
             {
                 return View();
             }
         }
-
-
-        //// POST: Inquilinoes/Delete/5
-        //[HttpPost, ActionName("Delete")]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> DeleteConfirmed(int id)
-        //{
-        //    var inquilino = repositorio.ObtenerPorId(id);
-
-        //    repositorio.Baja(inquilino.InquilinoId);
-             
-           
-        //    return RedirectToAction(nameof(Index));
-        //}
-
     }
 }

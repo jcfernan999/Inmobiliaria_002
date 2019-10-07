@@ -9,6 +9,5 @@ namespace Inmobiliaria_002.Models
     public interface IRepositorioInmueble : IRepositorio<Inmueble>
 	{
 
-        //IList<Inmueble> BuscarPorAlquileres(int InmuebleId);
     }
 }

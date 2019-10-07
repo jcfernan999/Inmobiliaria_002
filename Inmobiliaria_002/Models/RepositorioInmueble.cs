@@ -23,7 +23,7 @@ namespace Inmobiliaria_002.Models
 			using (SqlConnection connection = new SqlConnection(connectionString))
 			{
 				string sql = $"INSERT INTO Inmuebles (Direccion, Ambientes, Superficie, Latitud, Longitud,PropietarioId,EstaPublicado,EstaHabilitado) " +
-					$"VALUES ('{p.Direccion}', '{p.Ambientes}','{p.Superficie}','{p.Latitud}','{p.Longitud}','1','1','1')";
+					$"VALUES ('{p.Direccion}', '{p.Ambientes}','{p.Superficie}','{p.Latitud}','{p.Longitud}','10','1','1')";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
                     command.CommandType = CommandType.Text;
@@ -31,7 +31,7 @@ namespace Inmobiliaria_002.Models
                     res = command.ExecuteNonQuery();
                     command.CommandText = "SELECT SCOPE_IDENTITY()";
                     var id = command.ExecuteScalar();
-                    p.inmuebleId = Convert.ToInt32(id);
+                    p.InmuebleId = Convert.ToInt32(id);
                     connection.Close();
                 }
 			}
@@ -60,7 +60,7 @@ namespace Inmobiliaria_002.Models
 			{ 
 
  string sql = $"UPDATE Inmuebles SET Direccion='{p.Direccion}', Ambientes='{p.Ambientes}', Superficie='{p.Superficie}', Latitud='{p.Latitud}', Longitud='{p.Longitud}', PropietarioId='1' , EstaPublicado='{p.EstaPublicado}', EstaHabilitado='{p.EstaHabilitado}'" +
-					$" WHERE inmuebleId = {p.inmuebleId}";
+					$" WHERE inmuebleId = {p.InmuebleId}";
 				using (SqlCommand command = new SqlCommand(sql, connection))
 				{
 					command.CommandType = CommandType.Text;
@@ -88,7 +88,7 @@ namespace Inmobiliaria_002.Models
 					{
                         Inmueble p = new Inmueble
                         {
-                            inmuebleId = reader.GetInt32(0),
+                            InmuebleId = reader.GetInt32(0),
 							Direccion = reader.GetString(1),
 							Ambientes = reader.GetInt32(2),
 							Superficie = reader.GetInt32(3),
@@ -121,9 +121,9 @@ namespace Inmobiliaria_002.Models
 					var reader = command.ExecuteReader();
 					while (reader.Read())
 					{
-                          p = new Inmueble
+                        p = new Inmueble
                         {
-                            inmuebleId = reader.GetInt32(0),
+                            InmuebleId = reader.GetInt32(0),
                             Direccion = reader.GetString(1),
                             Ambientes = reader.GetInt32(2),
                             Superficie = reader.GetInt32(3),

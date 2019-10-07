@@ -11,7 +11,7 @@ namespace Inmobiliaria_002.Models
     public class Inmueble
     {
         [Display(Name = "Código")]
-        public int inmuebleId { get; set; }
+        public int InmuebleId { get; set; }
         [Required]
         public string Direccion { get; set; }
         [Required]
