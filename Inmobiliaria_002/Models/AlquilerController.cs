@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Inmobiliaria_002.Models;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
- 
-namespace Inmobiliaria_002.Controllers
+
+namespace Inmobiliaria_002.Models
 {
-    public class GarantesController : Controller
-
+    public class AlquilerController : Controller
     {
-        private readonly IRepositorio<Garante> repositorio;
+        private readonly IRepositorio<Alquiler> repositorio;
 
-        public GarantesController(IRepositorio<Garante> repositorio)
+        public AlquilerController(IRepositorio<Alquiler> repositorio)
         {
             this.repositorio = repositorio;
         }
 
-
-        // GET: Garantes
+        // GET: Alquiler
         public ActionResult Index()
         {
             var lista = repositorio.ObtenerTodos();
@@ -28,76 +27,26 @@ namespace Inmobiliaria_002.Controllers
             return View(lista);
         }
 
-        // GET: Garantes/Details/5
+        // GET: Alquiler/Details/5
         public ActionResult Details(int id)
         {
             return View();
         }
 
-        // GET: Garantes/Create
+        // GET: Alquiler/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Garantes/Create
+        // POST: Alquiler/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(Garante garante)
+        public ActionResult Create(Alquiler alquiler)
         {
             try
-            {
-                TempData["Nombre"] = garante.Nombre;
-                //if (ModelState.IsValid)
-                //{
-                repositorio.Alta(garante);
-                return RedirectToAction(nameof(Index));
-                //}
-                //else
-                //	return View();
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: Garantes/Edit/5
-        public async Task<IActionResult> Edit(int id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var garante = repositorio.ObtenerPorId(id);
-            if (garante == null)
-            {
-                return NotFound();
-            }
-            return View(garante);
-        }
-
-        // POST: Inquilino/Edit/5
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-
-        public ActionResult Edit(int id, Garante garante)
-        {
-            //var miPropietario = repositorio.ObtenerPorId(id);
-
-            if (id != garante.GaranteId)
-            {
-                return NotFound();
-            }
-
-            //if (ModelState.IsValid)
-            //{
-            try
-            {
-                repositorio.Modificacion(garante);
-
+            { 
+                    return View();
             }
             catch (Exception ex)
             {
@@ -105,18 +54,68 @@ namespace Inmobiliaria_002.Controllers
                 ViewBag.StackTrate = ex.StackTrace;
                 return View();
             }
-            return RedirectToAction(nameof(Index));
-            //}
-            //return View();
         }
 
-        // GET: Garantes/Delete/5
+        [HttpPost]
+        public JsonResult Buscar(DateTime s)
+        {
+            var res = repositorio.ObtenerTodos().Where(x => x.FechaAlta == s);
+            return new JsonResult(res);
+        }
+
+        // GET: Propietario/Edit/5
+        public async Task<IActionResult> Edit(int id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var alquiler = repositorio.ObtenerPorId(id);
+            if (alquiler == null)
+            {
+                return NotFound();
+            }
+            return View(alquiler);
+        }
+
+        // POST: Propietario/Edit/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(int id, Alquiler alquiler)
+        {
+            //var miPropietario = repositorio.ObtenerPorId(id);
+
+            if (id != alquiler.AlquilerId)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    repositorio.Modificacion(alquiler);
+                     
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = ex.Message;
+                    ViewBag.StackTrate = ex.StackTrace;
+                    return View();
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View();
+        }
+
+        // GET: Propietario/Delete/5
         public ActionResult Delete(int id)
         {
             return View();
         }
 
-        // POST: Garantes/Delete/5
+        // POST: Propietario/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id, IFormCollection collection)
@@ -125,14 +124,7 @@ namespace Inmobiliaria_002.Controllers
             {
                 // TODO: Add delete logic here
 
-                var garante = repositorio.ObtenerPorId(id);
-
-                repositorio.Baja(garante.GaranteId);
-
-
                 return RedirectToAction(nameof(Index));
-
-
             }
             catch
             {

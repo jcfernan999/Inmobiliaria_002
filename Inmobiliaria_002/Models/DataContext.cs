@@ -13,10 +13,12 @@ namespace Inmobiliaria_002.Models
         {
 
         }
-        public DbSet<Inmobiliaria_002.Models.Propietario> Propietarios { get; set; }
-        public DbSet<Inmobiliaria_002.Models.Inquilino> Inquilino { get; set; }
-        public DbSet<Inmobiliaria_002.Models.Garante> Garante { get; set; }
-        public DbSet<Inmobiliaria_002.Models.Inmueble> Inmueble { get; set; }
-        
+        public DbSet<Inmobiliaria_002.Models.Propietario> propietarios { get; set; }
+        public DbSet<Inmobiliaria_002.Models.Inquilino> inquilino { get; set; }
+        public DbSet<Inmobiliaria_002.Models.Inmueble> inmueble { get; set; }
+        public DbSet<Inmobiliaria_002.Models.Pago> pago { get; set; }
+        public DbSet<Inmobiliaria_002.Models.Alquiler> alquiler { get; set; }
+
+
     }
 }

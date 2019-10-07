@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 namespace Inmobiliaria_002.Models
 {
 	public class Propietario
-	{
+    {
         [Key]
-		public int PropietarioId { get; set; }
+        [Display(Name = "Codigo")]
+        public int PropietarioId { get; set; }
 		[Required]
 		public string Nombre { get; set; }
 		[Required]

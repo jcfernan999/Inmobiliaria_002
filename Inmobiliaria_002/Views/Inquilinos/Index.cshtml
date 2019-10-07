@@ -1,13 +1,13 @@
-﻿@model IEnumerable<Inmobiliaria_.Net_Core.Models.Inquilino>
+﻿@model IEnumerable<Inmobiliaria_002.Models.Inquilino>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Lista de inquilinos</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Nuevo inquilino</a>
 </p>
 <table class="table">
     <thead>
@@ -61,8 +61,8 @@
                 @Html.DisplayFor(modelItem => item.EstaHabilitado)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.InquilinoId">Edit</a> |
-                <a asp-action="Delete" asp-route-id="@item.InquilinoId">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.InquilinoId">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.InquilinoId">Eliminar</a>
             </td>
         </tr>
 }

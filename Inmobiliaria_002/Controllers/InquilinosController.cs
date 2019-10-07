@@ -71,7 +71,7 @@ namespace Inmobiliaria_002.Controllers
         // GET: Inquilino/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == 0)
+            if (id == null)
             {
                 return NotFound();
             }

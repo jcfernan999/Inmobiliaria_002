@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Inmobiliaria_002.Models.Pago>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de pagos</h1>
+
+<p>
+    <a asp-action="Create">Nuevo pago</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Fecha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Importe)
+            </th>
+            <th>
+               @* @Html.DisplayNameFor(model => model.miAlquiler)*@
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Fecha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Importe)
+            </td>
+            <td>
+               @* @Html.DisplayFor(modelItem => item.miAlquiler.AlquilerId)*@
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PagoId">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@item.PagoId">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -10,12 +10,15 @@ namespace Inmobiliaria_002.Controllers
 {
     public class InmueblesController : Controller
     {
-		private readonly IRepositorio<Inmueble> repositorio;
-        
-        public InmueblesController(IRepositorio<Inmueble> repositorio)
+		 
+        private readonly IRepositorioInmueble repositorio;
+        private readonly IRepositorioPropietario repoPropietario;
+
+        public InmueblesController(IRepositorioInmueble repositorio, IRepositorioPropietario repoPropietario)
 		{
 			this.repositorio = repositorio;
-		}
+            this.repoPropietario = repoPropietario;
+        }
 
                 // GET: Inquilino
         public ActionResult Index()
@@ -38,6 +41,7 @@ namespace Inmobiliaria_002.Controllers
         // GET: Inquilino/Create
         public ActionResult Create()
         {
+            ViewBag.Propietarios = repoPropietario.ObtenerTodos();
             return View();
         }
 
@@ -73,17 +77,13 @@ namespace Inmobiliaria_002.Controllers
         // GET: Inquilino/Edit/5
         public async Task<IActionResult> Edit(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var inmueble = repositorio.ObtenerPorId(id);
-            if (inmueble == null)
-            {
-                return NotFound();
-            }
-            return View(inmueble);
+            var entidad = repositorio.ObtenerPorId(id);
+            ViewBag.Propietarios = repoPropietario.ObtenerTodos();
+            if (TempData.ContainsKey("Mensaje"))
+                ViewBag.Mensaje = TempData["Mensaje"];
+            if (TempData.ContainsKey("Error"))
+                ViewBag.Error = TempData["Error"];
+            return View(entidad);
         }
 
         // POST: Inquilino/Edit/5

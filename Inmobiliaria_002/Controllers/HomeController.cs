@@ -10,24 +10,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Microsoft.Extensions.Configuration;
 
 namespace Inmobiliaria_002.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IRepositorioPropietario propietarios;
-        private readonly DataContext contexto;
+        private readonly IConfiguration config;
 
-        public HomeController(IRepositorioPropietario propietarios, DataContext contexto)
+        public HomeController(IRepositorioPropietario propietarios, IConfiguration config)
         {
             this.propietarios = propietarios;
-            this.contexto = contexto;
+            this.config = config;
         }
 
         public IActionResult Index()
         {
             ViewBag.Titulo = "Página de Inicio";
-            List<string> clientes = contexto.Propietarios.Select(x => x.Nombre + " " + x.Apellido).ToList();
+            List<string> clientes = propietarios.ObtenerTodos().Select(x => x.Nombre + " " + x.Apellido).ToList();
             return View(clientes);
         }
 
@@ -44,10 +45,9 @@ namespace Inmobiliaria_002.Controllers
         {
             try
             {
-
                 string hashed = Convert.ToBase64String(KeyDerivation.Pbkdf2(
                     password: loginView.Clave,
-                    salt: System.Text.Encoding.ASCII.GetBytes("SALADA"),
+                    salt: System.Text.Encoding.ASCII.GetBytes(config["Salt"]),
                     prf: KeyDerivationPrf.HMACSHA1,
                     iterationCount: 1000,
                     numBytesRequested: 256 / 8));
@@ -61,7 +61,8 @@ namespace Inmobiliaria_002.Controllers
                 {
                     new Claim(ClaimTypes.Name, p.Email),
                     new Claim("FullName", p.Nombre + " " + p.Apellido),
-                    new Claim(ClaimTypes.Role, p.PropietarioId < 10? "Administrador":"Propietario"),
+                    //new Claim(ClaimTypes.Role, p.IdPropietario < 10? "Administrador":"Propietario"),
+                    new Claim(ClaimTypes.Role, "Administrador"),
                 };
 
                 var claimsIdentity = new ClaimsIdentity(

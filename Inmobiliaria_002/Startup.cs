@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Inmobiliaria_002
 {
@@ -22,43 +23,76 @@ namespace Inmobiliaria_002
         {
             this.configuration = configuration;
         }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options =>
-               {
-                   options.LoginPath = "/Home/Login";
-                   options.LogoutPath = "/Home/Logout";
-                   options.AccessDeniedPath = "/Home/Restringido";
-               });
+                 .AddCookie(options =>
+                 {
+                     options.LoginPath = "/Home/Login";
+                     options.LogoutPath = "/Home/Logout";
+                     options.AccessDeniedPath = "/Home/Restringido";
+                 })
+                 .AddJwtBearer(options =>
+                 {
+                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                     {
+                         ValidateIssuer = true,
+                         ValidateAudience = true,
+                         ValidateLifetime = true,
+                         ValidateIssuerSigningKey = true,
+                         ValidIssuer = configuration["TokenAuthentication:Issuer"],
+                         ValidAudience = configuration["TokenAuthentication:Audience"],
+                         IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.ASCII.GetBytes(configuration["TokenAuthentication:SecretKey"])),
+                     };
+                 });
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("Administrador", policy => policy.RequireClaim(ClaimTypes.Role, "Administrador"));
             });
+
             services.AddMvc();
             services.AddTransient<IRepositorio<Propietario>, RepositorioPropietario>();
             services.AddTransient<IRepositorioPropietario, RepositorioPropietario>();
-            services.AddTransient<IRepositorio<Inquilino>, RepositorioInquilino>();
-            services.AddTransient<IRepositorio<Garante>, RepositorioGarante>();
+
+            services.AddTransient<IRepositorio<Pago>, RepositorioPago>();
+            services.AddTransient<IRepositorioPago, RepositorioPago>();
+
+            services.AddTransient<IRepositorio<Alquiler>, RepositorioAlquiler>();
+            services.AddTransient<IRepositorioAlquiler, RepositorioAlquiler>();
+
             services.AddTransient<IRepositorio<Inmueble>, RepositorioInmueble>();
+            services.AddTransient<IRepositorioInmueble, RepositorioInmueble>();
+
+            services.AddTransient<IRepositorio<Inquilino>, RepositorioInquilino>();
+            services.AddTransient<IRepositorioInquilino, RepositorioInquilino>();
+
             services.AddDbContext<DataContext>(options => options.UseSqlServer(configuration["ConnectionStrings:DefaultConnection"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            // Habilitar CORS
+            app.UseCors(x => x
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
+            // Uso de archivos estáticos (*.html, *.css, *.js, etc.)
             app.UseStaticFiles();
+            // Permitir cookies
             app.UseCookiePolicy(new CookiePolicyOptions
             {
                 MinimumSameSitePolicy = SameSiteMode.None,
             });
+            // Habilitar autenticación
             app.UseAuthentication();
-
-            if (env.IsDevelopment())//el anviente esta en desarrollo
+            // App en ambiente de desarrollo?
+            if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage();//página amarilla de errores
             }
 
             app.UseMvc(routes =>
