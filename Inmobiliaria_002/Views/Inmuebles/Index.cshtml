@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Inmobiliaria_.Net_Core.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Direccion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ambientes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Superficie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitud)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Duenio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstaPublicado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstaHabilitado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Direccion)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ambientes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Superficie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitud)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitud)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Duenio.Apellido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstaPublicado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstaHabilitado)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.inmuebleId">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.inmuebleId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
