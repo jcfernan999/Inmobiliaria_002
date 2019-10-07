@@ -21,7 +21,7 @@ namespace Inmobiliaria_002.Models
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
 
-                  //AlquilerId ,FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId, GaranteId  
+                 
         string sql = $"INSERT INTO Alquileres ( Descripcion,FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId) " +
                     $"VALUES ('{entidad.Descripcion}','{entidad.FechaAlta}', '{entidad.FechaBaja}','{entidad.Monto}','{entidad.InmuebleId}','{entidad.InquilinoId}')";
                 using (SqlCommand command = new SqlCommand(sql, connection))
@@ -54,11 +54,11 @@ namespace Inmobiliaria_002.Models
             return res;
         }
         public int Modificacion(Alquiler alquiler)
-        {//AlquilerId ,FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId, GaranteId  
+        { 
             int res = -1;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"UPDATE Alquileres SET Descripcion=@Descripcion, FechaAlta=@FechaAlta, FechaBaja=@FechaBaja, Monto=@Monto, InmuebleId=@InmuebleId, InquilinoId=@InquilinoId, GaranteId=@GaranteId " +
+                string sql = $"UPDATE Alquileres SET Descripcion=@Descripcion, FechaAlta=@FechaAlta, FechaBaja=@FechaBaja, Monto=@Monto, InmuebleId=@InmuebleId, InquilinoId=@InquilinoId " +
                     $"WHERE Id = {alquiler.AlquilerId}";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -83,7 +83,7 @@ namespace Inmobiliaria_002.Models
             IList<Alquiler> res = new List<Alquiler>();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"SELECT AlquilerId, Descripcion, FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId, GaranteId FROM Alquileres";
+                string sql = $"SELECT AlquilerId, Descripcion, FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId FROM Alquileres";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
                     command.CommandType = CommandType.Text;
@@ -115,7 +115,7 @@ namespace Inmobiliaria_002.Models
             Alquiler entidad = null;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
-                string sql = $"AlquilerId, Descripcion, FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId, GaranteId FROM Alquileres" +
+                string sql = $"AlquilerId, Descripcion, FechaAlta , FechaBaja , Monto , InmuebleId , InquilinoId FROM Alquileres" +
                     $" WHERE Id=@id";
                 using (SqlCommand command = new SqlCommand(sql, connection))
                 {
@@ -143,45 +143,6 @@ namespace Inmobiliaria_002.Models
             return entidad;
         }
 
-        //public IList<Inmueble> BuscarPorPropietario(int idPropietario)
-        //{
-        //    List<Inmueble> res = new List<Inmueble>();
-        //    Inmueble entidad = null;
-        //    using (SqlConnection connection = new SqlConnection(connectionString))
-        //    {
-        //        string sql = $"SELECT Id, Direccion, Ambientes, Superficie, Latitud, Longitud, PropietarioId, p.Nombre, p.Apellido" +
-        //            $" FROM Inmuebles i INNER JOIN Propietarios p ON i.PropietarioId = p.IdPropietario" +
-        //            $" WHERE PropietarioId=@idPropietario";
-        //        using (SqlCommand command = new SqlCommand(sql, connection))
-        //        {
-        //            command.Parameters.Add("@idPropietario", SqlDbType.Int).Value = idPropietario;
-        //            command.CommandType = CommandType.Text;
-        //            connection.Open();
-        //            var reader = command.ExecuteReader();
-        //            while (reader.Read())
-        //            {
-        //                entidad = new Inmueble
-        //                {
-        //                    Id = reader.GetInt32(0),
-        //                    Direccion = reader.GetString(1),
-        //                    Ambientes = reader.GetInt32(2),
-        //                    Superficie = reader.GetInt32(3),
-        //                    Latitud = reader.GetDecimal(4),
-        //                    Longitud = reader.GetDecimal(5),
-        //                    PropietarioId = reader.GetInt32(6),
-        //                    Duenio = new Propietario
-        //                    {
-        //                        IdPropietario = reader.GetInt32(6),
-        //                        Nombre = reader.GetString(7),
-        //                        Apellido = reader.GetString(8),
-        //                    }
-        //                };
-        //                res.Add(entidad);
-        //            }
-        //            connection.Close();
-        //        }
-        //    }
-        //    return res;
-        //}
+     
     }
 }
